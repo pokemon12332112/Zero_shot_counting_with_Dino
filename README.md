@@ -14,7 +14,7 @@ pip install torch torchvision
 ```
 2. Change the current directory to the GroundingDINO folder.
 ```bash
-cd GroundingDINO/
+cd Zero_shot_counting_with_Dino/
 ```
 3. Install the required dependencies in the current directory.
 ```bash
