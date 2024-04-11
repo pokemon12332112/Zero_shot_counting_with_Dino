@@ -109,7 +109,7 @@ def filter_large_boxes(boxes, max_size_ratio=1):
             filtered_boxes.append(box)
 
     return filtered_boxes
-
+results = []
 for im_id in pbar:
     anno = annotations[im_id]
     #bboxes = anno['box_examples_coordinates']
@@ -188,9 +188,12 @@ for im_id in pbar:
     err = abs(gt_cnt - pred_cnt)
     SAE += err
     SSE += err**2
-
+    results.append((im_id, im_dir, err))
     pbar.set_description('{:<8}: actual-predicted: {:6d}, {:6.1f}, error: {:6.1f}. Current MAE: {:5.2f}, RMSE: {:5.2f}'.\
                          format(im_id, gt_cnt, pred_cnt, abs(pred_cnt - gt_cnt), SAE/cnt, (SSE/cnt)**0.5))
     print("")
-
+results = sorted(results, key = lambda x: x[-1])
+for im_id, im_dir, error in results:
+    with open('log.txt', a) as f:
+        f.write(f'{im_id}: {error}')    
 print('On {} data, MAE: {:6.2f}, RMSE: {:6.2f}'.format(args.test_split, SAE/cnt, (SSE/cnt)**0.5))
